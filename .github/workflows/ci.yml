@@ -45,5 +45,7 @@ jobs:
           ./target/release/relay-desktop --token 1234 --port 47600 &
           echo $! > receiver.pid
           sleep 2
+          # uinput nodes are created root:input 0660; let the (non-root) reader open them
+          sudo chmod a+r /dev/input/event* || true
           python3 ci/runtime_test_linux.py
           kill "$(cat receiver.pid)" 2>/dev/null || true
