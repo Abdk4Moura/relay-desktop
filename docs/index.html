@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Relay — your phone is the keyboard</title>
+<meta name="description" content="Relay turns your phone into a wireless keyboard, trackpad, clipboard and file bridge for any computer or iPad. Linux, Windows, macOS." />
+<style>
+  :root{
+    --bg:#0a0d0b; --panel:#11150f; --panel2:#0e1310; --line:#1d2a20;
+    --text:#e8f0e9; --dim:#8aa394; --faint:#5d7367; --accent:#65EA92; --accent2:#3ad07a;
+    --mono:"SFMono-Regular",ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--text);font-family:Inter,-apple-system,Segoe UI,Roboto,system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent);text-decoration:none}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px}
+  header{display:flex;align-items:center;justify-content:space-between;padding:26px 0}
+  .logo{display:flex;align-items:center;gap:11px;font-weight:700;letter-spacing:.04em}
+  .glyph{width:30px;height:30px;border-radius:9px;background:var(--accent);display:grid;place-items:center}
+  .glyph i{width:11px;height:11px;background:#08120c;border-radius:3px;display:block}
+  .nav a{color:var(--dim);margin-left:20px;font-size:14px}
+  .nav a:hover{color:var(--text)}
+  .hero{padding:64px 0 36px;text-align:center}
+  .hero h1{font-size:clamp(34px,6vw,58px);line-height:1.04;margin:0 0 18px;letter-spacing:-.02em}
+  .hero h1 span{color:var(--accent)}
+  .hero p{font-size:clamp(16px,2.4vw,20px);color:var(--dim);max-width:620px;margin:0 auto 30px}
+  .pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:8px}
+  .pill{border:1px solid var(--line);border-radius:999px;padding:6px 14px;color:var(--dim);font-size:13px;font-family:var(--mono)}
+  .tabs{display:flex;gap:6px;justify-content:center;margin:34px 0 14px}
+  .tab{border:1px solid var(--line);background:var(--panel);color:var(--dim);padding:9px 18px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:600}
+  .tab.on{border-color:var(--accent);color:var(--accent);background:rgba(101,234,146,.08)}
+  .cmd{max-width:680px;margin:0 auto;background:var(--panel2);border:1px solid var(--line);border-radius:13px;display:flex;align-items:center;gap:12px;padding:16px 16px 16px 20px;text-align:left}
+  .cmd code{font-family:var(--mono);font-size:14px;color:var(--text);overflow:auto;white-space:nowrap;flex:1}
+  .cmd .dollar{color:var(--accent);font-family:var(--mono);user-select:none}
+  .copy{border:1px solid var(--line);background:transparent;color:var(--dim);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:12px;font-weight:600;white-space:nowrap}
+  .copy:hover{color:var(--accent);border-color:var(--accent)}
+  .sub{text-align:center;color:var(--faint);font-size:13px;margin-top:14px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:70px 0}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px}
+  .card h3{margin:0 0 7px;font-size:16px}
+  .card p{margin:0;color:var(--dim);font-size:14px}
+  .card .ico{font-size:22px;margin-bottom:12px}
+  .dl{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+  .dl a{border:1px solid var(--line);border-radius:10px;padding:10px 16px;color:var(--text);font-size:14px;background:var(--panel)}
+  .dl a:hover{border-color:var(--accent)}
+  section h2{text-align:center;font-size:28px;margin:0 0 8px;letter-spacing:-.01em}
+  section .lead{text-align:center;color:var(--dim);margin:0 auto 26px;max-width:560px}
+  footer{border-top:1px solid var(--line);margin-top:80px;padding:30px 0;color:var(--faint);font-size:13px;text-align:center}
+  .hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo"><span class="glyph"><i></i></span> RELAY</div>
+    <nav class="nav">
+      <a href="#install">Install</a>
+      <a href="#how">How it works</a>
+      <a href="https://github.com/Abdk4Moura/relay-desktop">GitHub</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div class="pills">
+      <span class="pill">Linux</span><span class="pill">Windows</span><span class="pill">macOS</span><span class="pill">Android app</span>
+    </div>
+    <h1>Your phone is the <span>keyboard</span>.</h1>
+    <p>Relay turns your Android phone into a wireless keyboard, trackpad, clipboard and file bridge for any computer — or an iPad over Bluetooth. One command to set up the desktop side.</p>
+  </div>
+
+  <div id="install">
+    <div class="tabs">
+      <button class="tab on" data-os="unix">Linux / macOS</button>
+      <button class="tab" data-os="win">Windows</button>
+    </div>
+    <div class="cmd" data-pane="unix">
+      <span class="dollar">$</span>
+      <code id="cmd-unix">curl -fsSL https://github.com/Abdk4Moura/relay-desktop/releases/latest/download/install.sh | sh</code>
+      <button class="copy" data-target="cmd-unix">Copy</button>
+    </div>
+    <div class="cmd hide" data-pane="win">
+      <span class="dollar">&gt;</span>
+      <code id="cmd-win">irm https://github.com/Abdk4Moura/relay-desktop/releases/latest/download/install.ps1 | iex</code>
+      <button class="copy" data-target="cmd-win">Copy</button>
+    </div>
+    <p class="sub">Installs the receiver, enables start-on-login, and launches it. Then open the Relay app on your phone — it finds your computer automatically.</p>
+    <div class="dl">
+      <a href="https://github.com/Abdk4Moura/relay-desktop/releases/latest">All downloads ↓</a>
+      <a href="https://github.com/Abdk4Moura/relay-hid/releases/latest">Android APK</a>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card"><div class="ico">⌨️</div><h3>Keyboard &amp; trackpad</h3><p>Full keyboard, multi-touch trackpad, media keys and a presenter remote — over Wi-Fi or Bluetooth.</p></div>
+    <div class="card"><div class="ico">📋</div><h3>Clipboard sync</h3><p>Copy on your phone, paste on your computer (and back). It just follows you.</p></div>
+    <div class="card"><div class="ico">📁</div><h3>Two-way files</h3><p>Send files and photos either direction with live progress. Big files welcome.</p></div>
+    <div class="card"><div class="ico">🔒</div><h3>Local &amp; private</h3><p>Direct device-to-device on your own network. PIN-protected, no cloud, no account.</p></div>
+  </div>
+
+  <section id="how">
+    <h2>Three steps</h2>
+    <p class="lead">No accounts, no pairing dances.</p>
+    <div class="grid">
+      <div class="card"><h3>1 · Install</h3><p>Run the one-liner on your computer (or grab the binary). It starts in the background and shows a control panel.</p></div>
+      <div class="card"><h3>2 · Open the app</h3><p>Launch Relay on your phone. It discovers your computer on the network — or scan its QR / enter IP + PIN.</p></div>
+      <div class="card"><h3>3 · Use it</h3><p>Type, swipe, scroll, copy-paste, drop files. For iPad/TV, switch the app to Bluetooth mode.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    Relay · open-source receiver on <a href="https://github.com/Abdk4Moura/relay-desktop">GitHub</a> · unsigned builds for now (allow through Gatekeeper / SmartScreen)
+  </footer>
+</div>
+
+<script>
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click',function(){
+      document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});
+      t.classList.add('on');
+      var os=t.dataset.os;
+      document.querySelectorAll('[data-pane]').forEach(function(p){
+        p.classList.toggle('hide', p.dataset.pane!==os);
+      });
+    });
+  });
+  document.querySelectorAll('.copy').forEach(function(b){
+    b.addEventListener('click',function(){
+      var txt=document.getElementById(b.dataset.target).textContent;
+      navigator.clipboard.writeText(txt).then(function(){
+        var o=b.textContent; b.textContent='Copied ✓';
+        setTimeout(function(){b.textContent=o},1400);
+      });
+    });
+  });
+</script>
+</body>
+</html>
