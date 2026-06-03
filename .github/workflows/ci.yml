@@ -1,0 +1,49 @@
+name: ci
+
+# Build on every push/PR, and on Linux actually run the receiver and prove it injects
+# real input (uinput) end-to-end — not just that it compiles.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: build ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo build --release --locked
+
+  runtime-linux:
+    name: runtime test (Linux uinput)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Build
+        run: cargo build --release --locked
+
+      - name: Enable uinput
+        run: |
+          sudo modprobe uinput
+          sudo chmod 666 /dev/uinput
+          python3 -m pip install --quiet evdev
+
+      - name: Run receiver + inject test
+        run: |
+          ./target/release/relay-desktop --token 1234 --port 47600 &
+          echo $! > receiver.pid
+          sleep 2
+          python3 ci/runtime_test_linux.py
+          kill "$(cat receiver.pid)" 2>/dev/null || true
