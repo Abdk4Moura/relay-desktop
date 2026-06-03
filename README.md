@@ -1,37 +1,47 @@
-# Relay desktop receiver (Linux)
+# Relay desktop receiver
 
-Turns your Linux machine into a target for the **Relay** phone app over **WiFi**.
-Injects keyboard/mouse input via the kernel's **uinput** interface, so it works
-under both **X11 and Wayland** (unlike X11-only injectors).
+Turns your **computer** into a target for the **Relay** phone app over **WiFi** —
+wireless keyboard, mouse/trackpad, clipboard sync and two-way file transfer.
+Runs on **Linux, Windows and macOS**.
+
+- **Linux** injects via the kernel's **uinput** (works under X11 *and* Wayland).
+- **Windows / macOS** inject via the OS synthetic-input APIs (SendInput / CGEvent).
 
 > WiFi mode is for **computers**. iPads can't be controlled this way — use Relay's
-> Bluetooth HID mode for those. WiFi unlocks things BT can't: clipboard sync,
-> file drop, longer range, no pairing (those land in later phases).
+> Bluetooth HID mode for those. WiFi unlocks clipboard sync, file drop, longer
+> range and no pairing.
 
-## Prebuilt binary (no Rust needed)
+## Install (one line)
 
-A **fully static x86_64 binary** (built with musl, runs on any Linux regardless of
-glibc) is attached to the GitHub release:
-
+**Linux / macOS**
 ```sh
-curl -L -o relay-desktop https://github.com/Abdk4Moura/relay-hid/releases/latest/download/relay-desktop-x86_64-linux
-chmod +x relay-desktop
+curl -fsSL https://github.com/Abdk4Moura/relay-desktop/releases/latest/download/install.sh | sh
 ```
+
+**Windows** (PowerShell)
+```powershell
+irm https://github.com/Abdk4Moura/relay-desktop/releases/latest/download/install.ps1 | iex
+```
+
+This downloads the right prebuilt binary, enables **start-on-login**, and launches it.
+Then open the Relay app on your phone — it discovers this computer automatically.
+Manage autostart later with `relay-desktop autostart on|off`.
+
+> Unsigned for now: macOS Gatekeeper / Windows SmartScreen will warn on first launch.
+> Allow it through ("More info → Run anyway" / right-click → Open). Signing is on the roadmap.
 
 ## Build from source
 
 ```sh
-cd desktop
 cargo build --release
-# or a portable static binary:
-rustup target add x86_64-unknown-linux-musl
-cargo build --release --target x86_64-unknown-linux-musl
 ```
 
-Build deps: a Rust toolchain (`rustup`) — no kernel headers needed, `evdev` talks to
-`/dev/uinput` directly. (Built against `evdev = 0.12`, Rust 1.96.)
+Needs a Rust toolchain (`rustup`). On Linux, `evdev` talks to `/dev/uinput` directly
+(no kernel headers); Windows/macOS pull `enigo`/`arboard`/`notify-rust` automatically.
 
-## Grant uinput access (one-time, avoids running as root)
+## Grant uinput access — Linux only (one-time, avoids running as root)
+
+The one-line installer does this for you. Manually:
 
 ```sh
 sudo cp 99-uinput.rules /etc/udev/rules.d/
@@ -39,7 +49,8 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 sudo usermod -aG input $USER     # log out / back in for the group to take effect
 ```
 
-(Or just run the binary with `sudo` to skip this.)
+(Or just run the binary with `sudo` to skip this.) On **macOS**, grant Relay
+**Accessibility** permission the first time (System Settings → Privacy & Security).
 
 ## Run
 
